@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Main extends Canvas implements KeyListener {
     static final int WIDTH = 1280;
@@ -23,6 +24,9 @@ public class Main extends Canvas implements KeyListener {
     static boolean downHeld  = false;
 
     static BufferedImage[] backgroundImg = new BufferedImage[1];
+
+    static ArrayList<ArrayList<Character>> level = new ArrayList<ArrayList<Character>>();
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Clean Game Loop");
@@ -43,6 +47,27 @@ public class Main extends Canvas implements KeyListener {
 
         try {
             backgroundImg[0] = ImageIO.read(new File("Escape/images/bg.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Level loading
+
+        try (BufferedReader br = new BufferedReader(new FileReader("Escape/level.txt"))) {
+            String line = br.readLine();
+
+            while (line != null)
+            {
+                ArrayList<Character> newRow = new ArrayList<>();
+                for (int i = 0; i < line.length(); i++)
+                {
+                    newRow.add(line.charAt(i));
+                    System.out.println(line.charAt(i));
+                }
+
+                level.add(newRow);
+                line = br.readLine();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
