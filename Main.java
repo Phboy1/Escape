@@ -14,6 +14,14 @@ public class Main extends Canvas implements KeyListener {
     static final int FRAME_DELAY = 16;
     static final int SIZE = 50;
     static final int PLAYER_SPEED = 5;
+    static final int TILE_SIZE = 40;
+
+    // Tiles
+
+    static final int WALL_BLOCK = 0;
+    static final int PLAYER_BLOCK = 1;
+    static final int ENEMY_BLOCK = 2;
+    static final int JAIL_BLOCK = 3;
 
     static int playerX = WIDTH / 2;
     static int playerY = HEIGHT / 2;
@@ -24,6 +32,8 @@ public class Main extends Canvas implements KeyListener {
     static boolean downHeld  = false;
 
     static BufferedImage[] backgroundImg = new BufferedImage[1];
+
+    static BufferedImage[] tiles = new BufferedImage[4];
 
     static ArrayList<ArrayList<Character>> level = new ArrayList<ArrayList<Character>>();
 
@@ -47,6 +57,13 @@ public class Main extends Canvas implements KeyListener {
 
         try {
             backgroundImg[0] = ImageIO.read(new File("Escape/images/bg.png"));
+
+            
+            tiles[WALL_BLOCK] = ImageIO.read(new File("Escape/images/wallblock.png"));
+            tiles[PLAYER_BLOCK] = ImageIO.read(new File("Escape/images/playerblock.png"));
+            tiles[ENEMY_BLOCK] = ImageIO.read(new File("Escape/images/enemyblock.png"));
+            tiles[JAIL_BLOCK] = ImageIO.read(new File("Escape/images/jailblock.png"));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,9 +133,34 @@ public class Main extends Canvas implements KeyListener {
 
     public static void draw(Graphics2D g2d) {
         g2d.drawImage(backgroundImg[0], 0, 0, null);
+        int i = 0;
+        int j = 0;
 
-        g2d.setColor(Color.CYAN);
-        g2d.fillRect(playerX, playerY, SIZE, SIZE);
+        for (ArrayList<Character> line : level)
+        {
+            for (Character character : line)
+            {
+                if (character == 'x')
+                {
+                    g2d.drawImage(tiles[WALL_BLOCK], j * TILE_SIZE, i * TILE_SIZE, null);
+                }
+                else if (character == 'p')
+                {
+                    g2d.drawImage(tiles[PLAYER_BLOCK], j * TILE_SIZE, i * TILE_SIZE, null);
+                }
+                else if (character == '1' || character == '2')
+                {
+                    g2d.drawImage(tiles[ENEMY_BLOCK], j * TILE_SIZE, i * TILE_SIZE, null);
+                }
+                else if (character == 'e')
+                {
+                    g2d.drawImage(tiles[JAIL_BLOCK], j * TILE_SIZE, i * TILE_SIZE, null);
+                }
+                j++;
+            }
+            j = 0;
+            i++;
+        }
     }
 
     // --- INPUT METHODS ---
