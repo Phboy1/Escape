@@ -1,7 +1,11 @@
+package Escape;
+
 import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.imageio.ImageIO;
+import java.io.*;
 
 public class Main extends Canvas implements KeyListener {
     static final int WIDTH = 1280;
@@ -18,6 +22,8 @@ public class Main extends Canvas implements KeyListener {
     static boolean upHeld    = false;
     static boolean downHeld  = false;
 
+    static BufferedImage[] backgroundImg = new BufferedImage[1];
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Clean Game Loop");
         Main game = new Main();
@@ -32,6 +38,14 @@ public class Main extends Canvas implements KeyListener {
 
         game.createBufferStrategy(3);
         BufferStrategy bs = game.getBufferStrategy();
+
+        //Images
+
+        try {
+            backgroundImg[0] = ImageIO.read(new File("Escape/images/bg.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         while (true) {
             // 1. Logic (Thinking)
@@ -76,8 +90,7 @@ public class Main extends Canvas implements KeyListener {
     }
 
     public static void draw(Graphics2D g2d) {
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, WIDTH, HEIGHT);
+        g2d.drawImage(backgroundImg[0], 0, 0, null);
 
         g2d.setColor(Color.CYAN);
         g2d.fillRect(playerX, playerY, SIZE, SIZE);
