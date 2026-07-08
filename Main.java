@@ -214,13 +214,13 @@ public class Main extends Canvas implements KeyListener {
             leftPressed = true;
         }
         if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !rightHeld) {
-            rightHeld = true;
+            rightPressed = true;
         }
         if ((e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) && !upHeld) {
-            upHeld = true;
+            upPressed = true;
         }
-        if ((e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_D) && !downHeld) {
-            downHeld = true;
+        if ((e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) && !downHeld) {
+            downPressed = true;
         }
     }
 
