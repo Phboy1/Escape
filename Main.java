@@ -14,7 +14,9 @@ public class Main extends Canvas implements KeyListener {
     static final int FRAME_DELAY = 16;
     static final int SIZE = 50;
     static final int PLAYER_SPEED = 5;
-    static final int TILE_SIZE = 40;
+    static final int TILE_SIZE = 32;
+
+    static final int NAVBAR_Y = 100;
 
     // Tiles
 
@@ -136,25 +138,28 @@ public class Main extends Canvas implements KeyListener {
         int i = 0;
         int j = 0;
 
+        int xOffset = (WIDTH - level.get(0).size() * TILE_SIZE)/2;
+        int yOffset = (HEIGHT - level.size() * TILE_SIZE + NAVBAR_Y)/2;
+
         for (ArrayList<Character> line : level)
         {
             for (Character character : line)
             {
                 if (character == 'x')
                 {
-                    g2d.drawImage(tiles[WALL_BLOCK], j * TILE_SIZE, i * TILE_SIZE, null);
+                    g2d.drawImage(tiles[WALL_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
                 }
                 else if (character == 'p')
                 {
-                    g2d.drawImage(tiles[PLAYER_BLOCK], j * TILE_SIZE, i * TILE_SIZE, null);
+                    g2d.drawImage(tiles[PLAYER_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
                 }
                 else if (character == '1' || character == '2')
                 {
-                    g2d.drawImage(tiles[ENEMY_BLOCK], j * TILE_SIZE, i * TILE_SIZE, null);
+                    g2d.drawImage(tiles[ENEMY_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
                 }
                 else if (character == 'e')
                 {
-                    g2d.drawImage(tiles[JAIL_BLOCK], j * TILE_SIZE, i * TILE_SIZE, null);
+                    g2d.drawImage(tiles[JAIL_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
                 }
                 j++;
             }
