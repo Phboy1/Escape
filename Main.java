@@ -18,6 +18,9 @@ public class Main extends Canvas implements KeyListener {
 
     static final int NAVBAR_Y = 100;
 
+    static int playerRow = 0;
+    static int playerCol = 0;
+
     // Tiles
 
     static final int WALL_BLOCK = 0;
@@ -25,8 +28,11 @@ public class Main extends Canvas implements KeyListener {
     static final int ENEMY_BLOCK = 2;
     static final int JAIL_BLOCK = 3;
 
-    static int playerX = WIDTH / 2;
-    static int playerY = HEIGHT / 2;
+
+    static boolean leftPressed = false;
+    static boolean rightPressed = false;
+    static boolean upPressed = false;
+    static boolean downPressed = false;
 
     static boolean leftHeld  = false;
     static boolean rightHeld = false;
@@ -119,18 +125,32 @@ public class Main extends Canvas implements KeyListener {
     // --- GAME ENGINE METHODS ---
 
     public static void update() {
-        if (leftHeld) {
-            playerX -= PLAYER_SPEED;
+        if (upPressed)
+        {
+            movePlayer(0, -1);
+            upHeld = true;
+            upPressed = false;
         }
-        if (rightHeld) {
-            playerX += PLAYER_SPEED;
+        if (rightPressed)
+        {
+            movePlayer(1, 0);
+            rightHeld = true;
+            rightPressed = false;
         }
-        if (upHeld) {
-            playerY -= PLAYER_SPEED;
+        if (leftPressed)
+        {
+            movePlayer(-1, 0);
+            leftHeld = true;
+            leftPressed = false;
         }
-        if (downHeld) {
-            playerY += PLAYER_SPEED;
+        if (downPressed)
+        {
+            movePlayer(0, 1);
+            downHeld = true;
+            downPressed = false;
         }
+        System.out.printf("Player row: %d%n", playerRow);
+        System.out.printf("Player col: %d%n", playerCol);
     }
 
     public static void draw(Graphics2D g2d) {
@@ -152,6 +172,8 @@ public class Main extends Canvas implements KeyListener {
                 else if (character == 'p')
                 {
                     g2d.drawImage(tiles[PLAYER_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
+                    playerCol = j;
+                    playerRow = i;
                 }
                 else if (character == '1' || character == '2')
                 {
@@ -168,34 +190,51 @@ public class Main extends Canvas implements KeyListener {
         }
     }
 
+    public static void movePlayer(int x, int y)
+    {
+        if (level.get(playerRow + y).get(playerCol + x) == 'x')
+        {
+            return;
+        }
+        else
+        {
+            level.get(playerRow).set(playerCol, '_');
+            playerRow += y;
+            playerCol += x;
+
+            level.get(playerRow).set(playerCol, 'p');
+            
+        }
+    }
+
     // --- INPUT METHODS ---
 
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            leftHeld = true;
+        if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !leftHeld) {
+            leftPressed = true;
         }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !rightHeld) {
             rightHeld = true;
         }
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
+        if ((e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) && !upHeld) {
             upHeld = true;
         }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+        if ((e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_D) && !downHeld) {
             downHeld = true;
         }
     }
 
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
             leftHeld = false;
         }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
             rightHeld = false;
         }
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
+        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
             upHeld = false;
         }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+        if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
             downHeld = false;
         }
     }
