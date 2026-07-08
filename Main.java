@@ -16,10 +16,18 @@ public class Main extends Canvas implements KeyListener {
     static final int PLAYER_SPEED = 5;
     static final int TILE_SIZE = 32;
 
+    static final int MAX_ENEMIES = 10;
+
+    static final long ENEMY_SPEED = 250000000L;
+
     static final int NAVBAR_Y = 100;
 
     static int playerRow = 0;
     static int playerCol = 0;
+
+    static ArrayList<Integer> enemyX = new ArrayList<Integer>();
+    static ArrayList<Integer> enemyY = new ArrayList<Integer>();
+    static ArrayList<String> enemyDir = new ArrayList<String>();
 
     // Tiles
 
@@ -80,6 +88,7 @@ public class Main extends Canvas implements KeyListener {
 
         try (BufferedReader br = new BufferedReader(new FileReader("Escape/level.txt"))) {
             String line = br.readLine();
+            int j = 0;
 
             while (line != null)
             {
@@ -87,11 +96,24 @@ public class Main extends Canvas implements KeyListener {
                 for (int i = 0; i < line.length(); i++)
                 {
                     newRow.add(line.charAt(i));
-                    System.out.println(line.charAt(i));
+                    
+                    if (line.charAt(i) == '1')
+                    {
+                        enemyX.add(i);
+                        enemyY.add(j);
+                        enemyDir.add(((int) (Math.random() * 2) + 1 % 2 == 0 ? "left" : "right"));
+                    }
+                    else if (line.charAt(i) == '2')
+                    {
+                        enemyX.add(i);
+                        enemyY.add(j);
+                        enemyDir.add(((int) (Math.random() * 2) + 1 % 2 == 0 ? "left" : "right"));
+                    }
                 }
 
                 level.add(newRow);
                 line = br.readLine();
+                j++;
             }
         } catch (Exception e) {
             e.printStackTrace();
