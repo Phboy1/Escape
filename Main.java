@@ -186,11 +186,6 @@ public class Main extends Canvas implements KeyListener {
                 continue;
             }
 
-            if (System.nanoTime() - enemyLastMove.get(i) < ENEMY_SPEED)
-            {
-                continue;
-            }
-
             if (enemyDir.get(i).equals("left"))
             {
                 if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('2'))
@@ -205,6 +200,25 @@ public class Main extends Canvas implements KeyListener {
                     enemyX.set(i, enemyX.get(i) - 1);
                     enemyLastMove.set(i, System.nanoTime());
                 }
+            }
+            else if (enemyDir.get(i).equals("right"))
+            {
+                if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('2'))
+                {
+                    enemyDir.set(i, "left");
+                }
+                else
+                {
+                    char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                    level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                    level.get(enemyY.get(i)).set(enemyX.get(i) + 1, self);
+                    enemyX.set(i, enemyX.get(i) + 1);
+                    enemyLastMove.set(i, System.nanoTime());
+                }
+            }
+            else
+            {
+                continue;
             }
         }
     }
