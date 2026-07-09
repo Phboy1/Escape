@@ -173,6 +173,22 @@ public class Main extends Canvas implements KeyListener {
         }
         System.out.printf("Player row: %d%n", playerRow);
         System.out.printf("Player col: %d%n", playerCol);
+
+        for (int i = 0; i < enemyX.size(); i++)
+        {
+            if (enemyDir.get(i).equals("left"))
+            {
+                if (level.get(enemyX.get(i) - 1).get(enemyY.get(i)).equals('x') || level.get(enemyX.get(i) - 1).get(enemyY.get(i)).equals('1') || level.get(enemyX.get(i) - 1).get(enemyY.get(i)).equals('2'))
+                {
+                    enemyDir.set(i, "right");
+                }
+                else
+                {
+                    level.get(enemyX.get(i)).set(enemyY.get(i), '_');
+                    level.get(enemyX.get(i) - 1).set(enemyY.get(i), '1');
+                }
+            }
+        }
     }
 
     public static void draw(Graphics2D g2d) {
