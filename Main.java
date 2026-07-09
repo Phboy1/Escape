@@ -28,6 +28,7 @@ public class Main extends Canvas implements KeyListener {
     static ArrayList<Integer> enemyX = new ArrayList<Integer>();
     static ArrayList<Integer> enemyY = new ArrayList<Integer>();
     static ArrayList<String> enemyDir = new ArrayList<String>();
+    static ArrayList<Long> enemyLastMove = new ArrayList<Long>();
 
     // Tiles
 
@@ -101,13 +102,17 @@ public class Main extends Canvas implements KeyListener {
                     {
                         enemyX.add(i);
                         enemyY.add(j);
-                        enemyDir.add(((int) (Math.random() * 2) + 1 % 2 == 0 ? "left" : "right"));
+                        enemyDir.add(((int) ((Math.random() * 2) + 1) % 2 == 0 ? "left" : "right"));
+                        enemyLastMove.add(System.nanoTime());
+
                     }
                     else if (line.charAt(i) == '2')
                     {
                         enemyX.add(i);
                         enemyY.add(j);
-                        enemyDir.add(((int) (Math.random() * 2) + 1 % 2 == 0 ? "left" : "right"));
+                        enemyDir.add(((int) ((Math.random() * 2) + 1) % 2 == 0 ? "left" : "right"));
+                        enemyLastMove.add(System.nanoTime());
+
                     }
                 }
 
@@ -176,16 +181,29 @@ public class Main extends Canvas implements KeyListener {
 
         for (int i = 0; i < enemyX.size(); i++)
         {
+            if (System.nanoTime() - enemyLastMove.get(i) < ENEMY_SPEED)
+            {
+                continue;
+            }
+
+            if (System.nanoTime() - enemyLastMove.get(i) < ENEMY_SPEED)
+            {
+                continue;
+            }
+
             if (enemyDir.get(i).equals("left"))
             {
-                if (level.get(enemyX.get(i) - 1).get(enemyY.get(i)).equals('x') || level.get(enemyX.get(i) - 1).get(enemyY.get(i)).equals('1') || level.get(enemyX.get(i) - 1).get(enemyY.get(i)).equals('2'))
+                if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('2'))
                 {
                     enemyDir.set(i, "right");
                 }
                 else
                 {
-                    level.get(enemyX.get(i)).set(enemyY.get(i), '_');
-                    level.get(enemyX.get(i) - 1).set(enemyY.get(i), '1');
+                    char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                    level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                    level.get(enemyY.get(i)).set(enemyX.get(i) - 1, self);
+                    enemyX.set(i, enemyX.get(i) - 1);
+                    enemyLastMove.set(i, System.nanoTime());
                 }
             }
         }
