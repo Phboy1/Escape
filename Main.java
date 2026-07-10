@@ -16,6 +16,8 @@ public class Main extends Canvas implements KeyListener {
     static final int PLAYER_SPEED = 5;
     static final int TILE_SIZE = 32;
 
+    static final long SECONDS_TO_NANO = 1000000000L;
+
     static int counter = 0;
 
     static final int MENU = 0;
@@ -64,6 +66,14 @@ public class Main extends Canvas implements KeyListener {
     static BufferedImage[] tiles = new BufferedImage[5];
 
     static ArrayList<ArrayList<Character>> level = new ArrayList<ArrayList<Character>>();
+
+    static long timer = 0; 
+
+    static long currentTime = System.nanoTime();
+
+    static long startTime = 0;
+
+    static long elaspedTime;
 
 
     public static void main(String[] args) {
@@ -137,6 +147,11 @@ public class Main extends Canvas implements KeyListener {
             e.printStackTrace();
         }
 
+        timer = (int) (0.05 * level.size() * level.get(0).size()) * SECONDS_TO_NANO;
+        startTime = System.nanoTime();
+
+        System.out.println(timer);
+
         spawnCookie();
 
         while (true) {
@@ -175,6 +190,8 @@ public class Main extends Canvas implements KeyListener {
             }
             case PLAYING:
             {
+                currentTime = System.nanoTime();
+                elaspedTime = timer - (currentTime - startTime);
                 if (upPressed)
                 {
                     movePlayer(0, -1);
@@ -341,6 +358,10 @@ public class Main extends Canvas implements KeyListener {
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Arial", Font.BOLD, 50));
         g2d.drawString(String.valueOf(counter), 1100, 65);
+
+        g2d.setFont(new Font("Arial", Font.BOLD, 50));
+        g2d.drawString(String.format("%.1f", ((double) elaspedTime / SECONDS_TO_NANO)), 700, 65);
+
 
         if (state == MENU)
         {
