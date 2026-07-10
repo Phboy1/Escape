@@ -16,6 +16,8 @@ public class Main extends Canvas implements KeyListener {
     static final int PLAYER_SPEED = 5;
     static final int TILE_SIZE = 32;
 
+    static int counter = 0;
+
     static final int MENU = 0;
     static final int PLAYING = 1;
     static final int WIN = 2;
@@ -336,6 +338,10 @@ public class Main extends Canvas implements KeyListener {
             i++;
         }
 
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.BOLD, 50));
+        g2d.drawString(String.valueOf(counter), 1100, 65);
+
         if (state == MENU)
         {
             g2d.setColor(new Color(0,0,0, 150));
@@ -369,6 +375,12 @@ public class Main extends Canvas implements KeyListener {
             level.get(playerRow).set(playerCol, '_');
             playerRow += y;
             playerCol += x;
+
+            if (level.get(playerRow).get(playerCol) == 'c')
+            {
+                spawnCookie();
+                counter++;
+            }
 
             level.get(playerRow).set(playerCol, 'p');
             
