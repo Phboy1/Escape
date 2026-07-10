@@ -411,10 +411,22 @@ public class Main extends Canvas implements KeyListener {
 
 
             g2d.drawString(startMessage, (WIDTH - startMessageWidth)/2, HEIGHT/2);
-
-
         }
 
+        if (state == LOSE)
+        {
+            g2d.setColor(new Color(0,0,0,150));
+            g2d.fillRect(0,0,WIDTH,HEIGHT);
+            g2d.setColor(Color.RED);
+            g2d.setFont(new Font("Arial", Font.BOLD, 90));
+
+            String loseMessage = "You Lose!";
+
+            FontMetrics fm = g2d.getFontMetrics();
+            int loseMessageWidth = fm.stringWidth(loseMessage);
+
+            g2d.drawString(loseMessage, (WIDTH- loseMessageWidth)/2, HEIGHT/2 + 40);
+        }
     }
 
     public static void movePlayer(int x, int y)
