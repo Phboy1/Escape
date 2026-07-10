@@ -200,6 +200,11 @@ public class Main extends Canvas implements KeyListener {
                 currentTime = System.nanoTime();
                 elaspedTime = timer - (currentTime - startTime);
 
+                if (elaspedTime <= 50000000)
+                {
+                    state = LOSE;
+                }
+
                 if (cookies >= cookiesNeeded)
                 {
                     open = true;
