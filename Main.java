@@ -44,6 +44,7 @@ public class Main extends Canvas implements KeyListener {
     static final int PLAYER_BLOCK = 1;
     static final int ENEMY_BLOCK = 2;
     static final int JAIL_BLOCK = 3;
+    static final int COOKIE = 4;
 
 
     static boolean leftPressed = false;
@@ -58,7 +59,7 @@ public class Main extends Canvas implements KeyListener {
 
     static BufferedImage[] backgroundImg = new BufferedImage[1];
 
-    static BufferedImage[] tiles = new BufferedImage[4];
+    static BufferedImage[] tiles = new BufferedImage[5];
 
     static ArrayList<ArrayList<Character>> level = new ArrayList<ArrayList<Character>>();
 
@@ -88,6 +89,7 @@ public class Main extends Canvas implements KeyListener {
             tiles[PLAYER_BLOCK] = ImageIO.read(new File("Escape/images/playerblock.png"));
             tiles[ENEMY_BLOCK] = ImageIO.read(new File("Escape/images/enemyblock.png"));
             tiles[JAIL_BLOCK] = ImageIO.read(new File("Escape/images/jailblock.png"));
+            tiles[COOKIE] = ImageIO.read(new File("Escape/images/cookie.png"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,6 +134,8 @@ public class Main extends Canvas implements KeyListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        spawnCookie();
 
         while (true) {
             // 1. Logic (Thinking)
@@ -213,6 +217,10 @@ public class Main extends Canvas implements KeyListener {
                             }
                             else
                             {
+                                if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('c'))
+                                {
+                                    spawnCookie();
+                                }
                                 char self = level.get(enemyY.get(i)).get(enemyX.get(i));
                                 level.get(enemyY.get(i)).set(enemyX.get(i), '_');
                                 level.get(enemyY.get(i)).set(enemyX.get(i) - 1, self);
@@ -228,6 +236,10 @@ public class Main extends Canvas implements KeyListener {
                             }
                             else
                             {
+                                if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('c'))
+                                {
+                                    spawnCookie();
+                                }
                                 char self = level.get(enemyY.get(i)).get(enemyX.get(i));
                                 level.get(enemyY.get(i)).set(enemyX.get(i), '_');
                                 level.get(enemyY.get(i)).set(enemyX.get(i) + 1, self);
@@ -246,6 +258,10 @@ public class Main extends Canvas implements KeyListener {
                             }
                             else
                             {
+                                if (level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('c'))
+                                {
+                                    spawnCookie();
+                                }
                                 char self = level.get(enemyY.get(i)).get(enemyX.get(i));
                                 level.get(enemyY.get(i)).set(enemyX.get(i), '_');
                                 level.get(enemyY.get(i) - 1).set(enemyX.get(i), self);
@@ -261,6 +277,10 @@ public class Main extends Canvas implements KeyListener {
                             }
                             else
                             {
+                                if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('c'))
+                                {
+                                    spawnCookie();
+                                }
                                 char self = level.get(enemyY.get(i)).get(enemyX.get(i));
                                 level.get(enemyY.get(i)).set(enemyX.get(i), '_');
                                 level.get(enemyY.get(i) + 1).set(enemyX.get(i), self);
@@ -306,6 +326,10 @@ public class Main extends Canvas implements KeyListener {
                 {
                     g2d.drawImage(tiles[JAIL_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
                 }
+                else if (character == 'c')
+                {
+                    g2d.drawImage(tiles[COOKIE], j*TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
+                }
                 j++;
             }
             j = 0;
@@ -349,6 +373,20 @@ public class Main extends Canvas implements KeyListener {
             level.get(playerRow).set(playerCol, 'p');
             
         }
+    }
+
+    public static void spawnCookie()
+    {
+        int row;
+        int col;
+
+        do
+        {
+            row = (int) (Math.random() * level.size());
+            col = (int) (Math.random() * level.get(row).size());
+        } while (level.get(row).get(col) == 'x' || level.get(row).get(col) == 'p' || level.get(row).get(col) == '1' || level.get(row).get(col) == '2');
+
+        level.get(row).set(col, 'c');
     }
 
     // --- INPUT METHODS ---
