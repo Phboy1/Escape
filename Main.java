@@ -16,6 +16,13 @@ public class Main extends Canvas implements KeyListener {
     static final int PLAYER_SPEED = 5;
     static final int TILE_SIZE = 32;
 
+    static final int MENU = 0;
+    static final int PLAYING = 1;
+    static final int WIN = 2;
+    static final int LOSE = 3;
+
+    static int state = 0;
+
     static final int MAX_ENEMIES = 10;
 
     static final long ENEMY_SPEED = 250000000L;
@@ -154,107 +161,119 @@ public class Main extends Canvas implements KeyListener {
     // --- GAME ENGINE METHODS ---
 
     public static void update() {
-        if (upPressed)
+        switch(state)
         {
-            movePlayer(0, -1);
-            upHeld = true;
-            upPressed = false;
-        }
-        if (rightPressed)
-        {
-            movePlayer(1, 0);
-            rightHeld = true;
-            rightPressed = false;
-        }
-        if (leftPressed)
-        {
-            movePlayer(-1, 0);
-            leftHeld = true;
-            leftPressed = false;
-        }
-        if (downPressed)
-        {
-            movePlayer(0, 1);
-            downHeld = true;
-            downPressed = false;
-        }
-        System.out.printf("Player row: %d%n", playerRow);
-        System.out.printf("Player col: %d%n", playerCol);
+            case MENU:
+            {
+                break;
+            }
+            case PLAYING:
+            {
+                if (upPressed)
+                {
+                    movePlayer(0, -1);
+                    upHeld = true;
+                    upPressed = false;
+                }
+                if (rightPressed)
+                {
+                    movePlayer(1, 0);
+                    rightHeld = true;
+                    rightPressed = false;
+                }
+                if (leftPressed)
+                {
+                    movePlayer(-1, 0);
+                    leftHeld = true;
+                    leftPressed = false;
+                }
+                if (downPressed)
+                {
+                    movePlayer(0, 1);
+                    downHeld = true;
+                    downPressed = false;
+                }
+                System.out.printf("Player row: %d%n", playerRow);
+                System.out.printf("Player col: %d%n", playerCol);
 
-        for (int i = 0; i < enemyX.size(); i++)
-        {
-            if (System.nanoTime() - enemyLastMove.get(i) < ENEMY_SPEED)
-            {
-                continue;
-            }
+                for (int i = 0; i < enemyX.size(); i++)
+                {
+                    if (System.nanoTime() - enemyLastMove.get(i) < ENEMY_SPEED)
+                    {
+                        continue;
+                    }
 
-            if (enemyType.get(i) == '1')
-            {
-                if (enemyDir.get(i).equals("left"))
-                {
-                    if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('2'))
+                    if (enemyType.get(i) == '1')
                     {
-                        enemyDir.set(i, "right");
+                        if (enemyDir.get(i).equals("left"))
+                        {
+                            if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('2'))
+                            {
+                                enemyDir.set(i, "right");
+                            }
+                            else
+                            {
+                                char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                                level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                                level.get(enemyY.get(i)).set(enemyX.get(i) - 1, self);
+                                enemyX.set(i, enemyX.get(i) - 1);
+                                enemyLastMove.set(i, System.nanoTime());
+                            }
+                        }
+                        else if (enemyDir.get(i).equals("right"))
+                        {
+                            if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('2'))
+                            {
+                                enemyDir.set(i, "left");
+                            }
+                            else
+                            {
+                                char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                                level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                                level.get(enemyY.get(i)).set(enemyX.get(i) + 1, self);
+                                enemyX.set(i, enemyX.get(i) + 1);
+                                enemyLastMove.set(i, System.nanoTime());
+                            }
+                        }
                     }
-                    else
+                    else if (enemyType.get(i) == '2')
                     {
-                        char self = level.get(enemyY.get(i)).get(enemyX.get(i));
-                        level.get(enemyY.get(i)).set(enemyX.get(i), '_');
-                        level.get(enemyY.get(i)).set(enemyX.get(i) - 1, self);
-                        enemyX.set(i, enemyX.get(i) - 1);
-                        enemyLastMove.set(i, System.nanoTime());
+                        if (enemyDir.get(i).equals("up"))
+                        {
+                            if (level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('2'))
+                            {
+                                enemyDir.set(i, "down");
+                            }
+                            else
+                            {
+                                char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                                level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                                level.get(enemyY.get(i) - 1).set(enemyX.get(i), self);
+                                enemyY.set(i, enemyY.get(i) - 1);
+                                enemyLastMove.set(i, System.nanoTime());
+                            }
+                        }
+                        else if (enemyDir.get(i).equals("down"))
+                        {
+                            if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('2'))
+                            {
+                                enemyDir.set(i, "up");
+                            }
+                            else
+                            {
+                                char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                                level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                                level.get(enemyY.get(i) + 1).set(enemyX.get(i), self);
+                                enemyY.set(i, enemyY.get(i) + 1);
+                                enemyLastMove.set(i, System.nanoTime());
+                            }
+                        }
                     }
                 }
-                else if (enemyDir.get(i).equals("right"))
-                {
-                    if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('2'))
-                    {
-                        enemyDir.set(i, "left");
-                    }
-                    else
-                    {
-                        char self = level.get(enemyY.get(i)).get(enemyX.get(i));
-                        level.get(enemyY.get(i)).set(enemyX.get(i), '_');
-                        level.get(enemyY.get(i)).set(enemyX.get(i) + 1, self);
-                        enemyX.set(i, enemyX.get(i) + 1);
-                        enemyLastMove.set(i, System.nanoTime());
-                    }
-                }
-            }
-            else if (enemyType.get(i) == '2')
-            {
-                if (enemyDir.get(i).equals("up"))
-                {
-                    if (level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('2'))
-                    {
-                        enemyDir.set(i, "down");
-                    }
-                    else
-                    {
-                        char self = level.get(enemyY.get(i)).get(enemyX.get(i));
-                        level.get(enemyY.get(i)).set(enemyX.get(i), '_');
-                        level.get(enemyY.get(i) - 1).set(enemyX.get(i), self);
-                        enemyY.set(i, enemyY.get(i) - 1);
-                        enemyLastMove.set(i, System.nanoTime());
-                    }
-                }
-                else if (enemyDir.get(i).equals("down"))
-                {
-                    if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('2'))
-                    {
-                        enemyDir.set(i, "up");
-                    }
-                    else
-                    {
-                        char self = level.get(enemyY.get(i)).get(enemyX.get(i));
-                        level.get(enemyY.get(i)).set(enemyX.get(i), '_');
-                        level.get(enemyY.get(i) + 1).set(enemyX.get(i), self);
-                        enemyY.set(i, enemyY.get(i) + 1);
-                        enemyLastMove.set(i, System.nanoTime());
-                    }
-                }
+                break;
             }
         }
+        
     }
 
     public static void draw(Graphics2D g2d) {
@@ -292,6 +311,27 @@ public class Main extends Canvas implements KeyListener {
             j = 0;
             i++;
         }
+
+        if (state == MENU)
+        {
+            g2d.setColor(new Color(0,0,0, 150));
+            g2d.fillRect(0, 0, WIDTH, HEIGHT);
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(new Font("Arial", Font.BOLD, 50));
+
+            String startMessage = "Press ENTER to start";
+
+
+
+            FontMetrics fm = g2d.getFontMetrics();
+            int startMessageWidth = fm.stringWidth(startMessage);
+
+
+            g2d.drawString(startMessage, (WIDTH - startMessageWidth)/2, HEIGHT/2);
+
+
+        }
+
     }
 
     public static void movePlayer(int x, int y)
@@ -325,6 +365,11 @@ public class Main extends Canvas implements KeyListener {
         }
         if ((e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) && !downHeld) {
             downPressed = true;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_ENTER && state == MENU)
+        {
+            state = PLAYING;
         }
     }
 
