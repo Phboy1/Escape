@@ -451,6 +451,16 @@ public class Main extends Canvas implements KeyListener {
             int loseMessageWidth = fm.stringWidth(loseMessage);
 
             g2d.drawString(loseMessage, (WIDTH - loseMessageWidth)/2, HEIGHT/2 + 40);
+
+            g2d.setColor(Color.WHITE);
+
+            g2d.fillRoundRect((WIDTH-200)/2, (HEIGHT - 70)/2 + 170, 200, 70, 16, 16);
+
+            g2d.setColor(Color.BLACK);
+
+            g2d.setFont(new Font("Arial", Font.BOLD, 30));
+
+            g2d.drawString("Try again?", (WIDTH-200)/2 + 25, (HEIGHT - 70)/2 + 215);
         }
 
         if (state == WIN)
@@ -541,6 +551,7 @@ public class Main extends Canvas implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_ENTER && state == MENU)
         {
             state = PLAYING;
+            startTime = System.nanoTime();
         }
     }
 
