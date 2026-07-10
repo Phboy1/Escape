@@ -360,7 +360,7 @@ public class Main extends Canvas implements KeyListener {
         g2d.drawString(String.valueOf(counter), 1100, 65);
 
         g2d.setFont(new Font("Arial", Font.BOLD, 50));
-        g2d.drawString(String.format("%.1f", ((double) elaspedTime / SECONDS_TO_NANO)), 700, 65);
+        g2d.drawString(String.format("%.1f", ((double) elaspedTime / SECONDS_TO_NANO)), 400, 65);
 
 
         if (state == MENU)
