@@ -211,7 +211,7 @@ public class Main extends Canvas implements KeyListener {
                     {
                         if (enemyDir.get(i).equals("left"))
                         {
-                            if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('2'))
+                            if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('2') || level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('e'))
                             {
                                 enemyDir.set(i, "right");
                             }
@@ -230,7 +230,7 @@ public class Main extends Canvas implements KeyListener {
                         }
                         else if (enemyDir.get(i).equals("right"))
                         {
-                            if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('2'))
+                            if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('x') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('1') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('2') || level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('e'))
                             {
                                 enemyDir.set(i, "left");
                             }
@@ -252,7 +252,7 @@ public class Main extends Canvas implements KeyListener {
                     {
                         if (enemyDir.get(i).equals("up"))
                         {
-                            if (level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('2'))
+                            if (level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('2') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('e'))
                             {
                                 enemyDir.set(i, "down");
                             }
@@ -271,7 +271,7 @@ public class Main extends Canvas implements KeyListener {
                         }
                         else if (enemyDir.get(i).equals("down"))
                         {
-                            if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('2'))
+                            if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('2') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('e'))
                             {
                                 enemyDir.set(i, "up");
                             }
