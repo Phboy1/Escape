@@ -445,7 +445,22 @@ public class Main extends Canvas implements KeyListener {
             FontMetrics fm = g2d.getFontMetrics();
             int loseMessageWidth = fm.stringWidth(loseMessage);
 
-            g2d.drawString(loseMessage, (WIDTH- loseMessageWidth)/2, HEIGHT/2 + 40);
+            g2d.drawString(loseMessage, (WIDTH - loseMessageWidth)/2, HEIGHT/2 + 40);
+        }
+
+        if (state == WIN)
+        {
+            g2d.setColor(new Color(0,0,0, 150));
+            g2d.fillRect(0,0,WIDTH,HEIGHT);
+            g2d.setColor(Color.GREEN);
+            g2d.setFont(new Font("Arial", Font.BOLD, 90));
+
+            String winMessage = "YOU WIN!";
+
+            FontMetrics fm = g2d.getFontMetrics();
+            int winMessageLength = fm.stringWidth(winMessage);
+
+            g2d.drawString(winMessage, (WIDTH - winMessageLength)/2, HEIGHT/2 + 40);
         }
     }
 
@@ -468,7 +483,12 @@ public class Main extends Canvas implements KeyListener {
                 state = LOSE;
             }
 
-            if (state != LOSE)
+            if (level.get(playerRow + y).get(playerCol + x) == 'e' && open)
+            {
+                state = WIN;
+            }
+
+            if (state != LOSE && state != WIN);
             {
                 level.get(playerRow).set(playerCol, '_');
                 playerRow += y;
@@ -488,7 +508,7 @@ public class Main extends Canvas implements KeyListener {
         {
             row = (int) (Math.random() * level.size());
             col = (int) (Math.random() * level.get(row).size());
-        } while (level.get(row).get(col) == 'x' || level.get(row).get(col) == 'p' || level.get(row).get(col) == '1' || level.get(row).get(col) == '2');
+        } while (level.get(row).get(col) == 'x' || level.get(row).get(col) == 'p' || level.get(row).get(col) == '1' || level.get(row).get(col) == '2' || level.get(row).get(col) == 'e');
 
         level.get(row).set(col, 'c');
     }
@@ -496,16 +516,20 @@ public class Main extends Canvas implements KeyListener {
     // --- INPUT METHODS ---
 
     public void keyPressed(KeyEvent e) {
-        if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !leftHeld) {
+        if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !leftHeld)
+        {
             leftPressed = true;
         }
-        if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !rightHeld) {
+        if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !rightHeld)
+        {
             rightPressed = true;
         }
-        if ((e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) && !upHeld) {
+        if ((e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) && !upHeld)
+        {
             upPressed = true;
         }
-        if ((e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) && !downHeld) {
+        if ((e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) && !downHeld)
+        {
             downPressed = true;
         }
 
@@ -516,16 +540,20 @@ public class Main extends Canvas implements KeyListener {
     }
 
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
+        {
             leftHeld = false;
         }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
+        {
             rightHeld = false;
         }
-        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
+        {
             upHeld = false;
         }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
+        if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
+        {
             downHeld = false;
         }
     }
