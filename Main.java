@@ -112,7 +112,7 @@ public class Main extends Canvas implements KeyListener {
                     {
                         enemyX.add(i);
                         enemyY.add(j);
-                        enemyDir.add(((int) ((Math.random() * 2) + 1) % 2 == 0 ? "left" : "right"));
+                        enemyDir.add(((int) ((Math.random() * 2) + 1) % 2 == 0 ? "up" : "down"));
                         enemyLastMove.add(System.nanoTime());
                         enemyType.add('2');
                     }
@@ -217,6 +217,39 @@ public class Main extends Canvas implements KeyListener {
                         level.get(enemyY.get(i)).set(enemyX.get(i), '_');
                         level.get(enemyY.get(i)).set(enemyX.get(i) + 1, self);
                         enemyX.set(i, enemyX.get(i) + 1);
+                        enemyLastMove.set(i, System.nanoTime());
+                    }
+                }
+            }
+            else if (enemyType.get(i) == '2')
+            {
+                if (enemyDir.get(i).equals("up"))
+                {
+                    if (level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('2'))
+                    {
+                        enemyDir.set(i, "down");
+                    }
+                    else
+                    {
+                        char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                        level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                        level.get(enemyY.get(i) - 1).set(enemyX.get(i), self);
+                        enemyY.set(i, enemyY.get(i) - 1);
+                        enemyLastMove.set(i, System.nanoTime());
+                    }
+                }
+                else if (enemyDir.get(i).equals("down"))
+                {
+                    if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('x') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('1') || level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('2'))
+                    {
+                        enemyDir.set(i, "up");
+                    }
+                    else
+                    {
+                        char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                        level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                        level.get(enemyY.get(i) + 1).set(enemyX.get(i), self);
+                        enemyY.set(i, enemyY.get(i) + 1);
                         enemyLastMove.set(i, System.nanoTime());
                     }
                 }
