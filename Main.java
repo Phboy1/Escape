@@ -240,11 +240,19 @@ public class Main extends Canvas implements KeyListener {
                                 {
                                     spawnCookie();
                                 }
-                                char self = level.get(enemyY.get(i)).get(enemyX.get(i));
-                                level.get(enemyY.get(i)).set(enemyX.get(i), '_');
-                                level.get(enemyY.get(i)).set(enemyX.get(i) - 1, self);
-                                enemyX.set(i, enemyX.get(i) - 1);
-                                enemyLastMove.set(i, System.nanoTime());
+
+                                if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('c'))
+                                {
+                                    state = LOSE;
+                                }
+                                else
+                                {
+                                    char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                                    level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                                    level.get(enemyY.get(i)).set(enemyX.get(i) - 1, self);
+                                    enemyX.set(i, enemyX.get(i) - 1);
+                                    enemyLastMove.set(i, System.nanoTime());
+                                }  
                             }
                         }
                         else if (enemyDir.get(i).equals("right"))
@@ -259,11 +267,19 @@ public class Main extends Canvas implements KeyListener {
                                 {
                                     spawnCookie();
                                 }
-                                char self = level.get(enemyY.get(i)).get(enemyX.get(i));
-                                level.get(enemyY.get(i)).set(enemyX.get(i), '_');
-                                level.get(enemyY.get(i)).set(enemyX.get(i) + 1, self);
-                                enemyX.set(i, enemyX.get(i) + 1);
-                                enemyLastMove.set(i, System.nanoTime());
+
+                                if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('p'))
+                                {
+                                    state = LOSE;
+                                }
+                                else
+                                {
+                                    char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                                    level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                                    level.get(enemyY.get(i)).set(enemyX.get(i) + 1, self);
+                                    enemyX.set(i, enemyX.get(i) + 1);
+                                    enemyLastMove.set(i, System.nanoTime());
+                                }
                             }
                         }
                     }
@@ -281,11 +297,19 @@ public class Main extends Canvas implements KeyListener {
                                 {
                                     spawnCookie();
                                 }
-                                char self = level.get(enemyY.get(i)).get(enemyX.get(i));
-                                level.get(enemyY.get(i)).set(enemyX.get(i), '_');
-                                level.get(enemyY.get(i) - 1).set(enemyX.get(i), self);
-                                enemyY.set(i, enemyY.get(i) - 1);
-                                enemyLastMove.set(i, System.nanoTime());
+
+                                if (level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('p'))
+                                {
+                                    state = LOSE;
+                                }
+                                else
+                                {
+                                    char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                                    level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                                    level.get(enemyY.get(i) - 1).set(enemyX.get(i), self);
+                                    enemyY.set(i, enemyY.get(i) - 1);
+                                    enemyLastMove.set(i, System.nanoTime());
+                                }
                             }
                         }
                         else if (enemyDir.get(i).equals("down"))
@@ -300,11 +324,19 @@ public class Main extends Canvas implements KeyListener {
                                 {
                                     spawnCookie();
                                 }
-                                char self = level.get(enemyY.get(i)).get(enemyX.get(i));
-                                level.get(enemyY.get(i)).set(enemyX.get(i), '_');
-                                level.get(enemyY.get(i) + 1).set(enemyX.get(i), self);
-                                enemyY.set(i, enemyY.get(i) + 1);
-                                enemyLastMove.set(i, System.nanoTime());
+
+                                if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('p'))
+                                {
+                                    state = LOSE;
+                                }
+                                else
+                                {
+                                    char self = level.get(enemyY.get(i)).get(enemyX.get(i));
+                                    level.get(enemyY.get(i)).set(enemyX.get(i), '_');
+                                    level.get(enemyY.get(i) + 1).set(enemyX.get(i), self);
+                                    enemyY.set(i, enemyY.get(i) + 1);
+                                    enemyLastMove.set(i, System.nanoTime());
+                                }
                             }
                         }
                     }
@@ -393,18 +425,25 @@ public class Main extends Canvas implements KeyListener {
         }
         else
         {
-            level.get(playerRow).set(playerCol, '_');
-            playerRow += y;
-            playerCol += x;
-
-            if (level.get(playerRow).get(playerCol) == 'c')
+            if (level.get(playerRow + y).get(playerCol + x) == 'c')
             {
                 spawnCookie();
                 counter++;
             }
 
-            level.get(playerRow).set(playerCol, 'p');
-            
+            if (level.get(playerRow + y).get(playerCol + x) == '1' || level.get(playerRow + y).get(playerCol + x) == '2')
+            {
+                state = LOSE;
+            }
+
+            if (state != LOSE)
+            {
+                level.get(playerRow).set(playerCol, '_');
+                playerRow += y;
+                playerCol += x;
+
+                level.get(playerRow).set(playerCol, 'p');
+            }  
         }
     }
 
