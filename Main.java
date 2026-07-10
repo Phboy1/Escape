@@ -18,7 +18,7 @@ public class Main extends Canvas implements KeyListener {
 
     static final long SECONDS_TO_NANO = 1000000000L;
 
-    static int counter = 0;
+    static int cookies = 0;
 
     static final int MENU = 0;
     static final int PLAYING = 1;
@@ -49,6 +49,7 @@ public class Main extends Canvas implements KeyListener {
     static final int ENEMY_BLOCK = 2;
     static final int JAIL_BLOCK = 3;
     static final int COOKIE = 4;
+    static final int CHECKERED_BLOCK = 5;
 
 
     static boolean leftPressed = false;
@@ -61,13 +62,17 @@ public class Main extends Canvas implements KeyListener {
     static boolean upHeld    = false;
     static boolean downHeld  = false;
 
+    static boolean open = false;
+
     static BufferedImage[] backgroundImg = new BufferedImage[1];
 
-    static BufferedImage[] tiles = new BufferedImage[5];
+    static BufferedImage[] tiles = new BufferedImage[6];
 
     static ArrayList<ArrayList<Character>> level = new ArrayList<ArrayList<Character>>();
 
     static long timer = 0; 
+
+    static int cookiesNeeded = 0;
 
     static long currentTime = System.nanoTime();
 
@@ -102,6 +107,7 @@ public class Main extends Canvas implements KeyListener {
             tiles[ENEMY_BLOCK] = ImageIO.read(new File("Escape/images/enemyblock.png"));
             tiles[JAIL_BLOCK] = ImageIO.read(new File("Escape/images/jailblock.png"));
             tiles[COOKIE] = ImageIO.read(new File("Escape/images/cookie.png"));
+            tiles[CHECKERED_BLOCK] = ImageIO.read(new File("Escape/images/checkeredblock.png"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,6 +154,7 @@ public class Main extends Canvas implements KeyListener {
         }
 
         timer = (int) (0.05 * level.size() * level.get(0).size()) * SECONDS_TO_NANO;
+        cookiesNeeded = (int) (0.02 * level.size() * level.get(0).size());
         startTime = System.nanoTime();
 
         System.out.println(timer);
@@ -192,6 +199,12 @@ public class Main extends Canvas implements KeyListener {
             {
                 currentTime = System.nanoTime();
                 elaspedTime = timer - (currentTime - startTime);
+
+                if (cookies >= cookiesNeeded)
+                {
+                    open = true;
+                }
+
                 if (upPressed)
                 {
                     movePlayer(0, -1);
@@ -375,7 +388,14 @@ public class Main extends Canvas implements KeyListener {
                 }
                 else if (character == 'e')
                 {
-                    g2d.drawImage(tiles[JAIL_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
+                    if (!open)
+                    {
+                        g2d.drawImage(tiles[JAIL_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
+                    }
+                    else
+                    {
+                        g2d.drawImage(tiles[CHECKERED_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
+                    }
                 }
                 else if (character == 'c')
                 {
@@ -389,7 +409,7 @@ public class Main extends Canvas implements KeyListener {
 
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Arial", Font.BOLD, 50));
-        g2d.drawString(String.valueOf(counter), 1100, 65);
+        g2d.drawString(String.format("%s/%s",String.valueOf(cookies), String.valueOf(cookiesNeeded)), 1100, 65);
 
         g2d.setFont(new Font("Arial", Font.BOLD, 50));
         g2d.drawString(String.format("%.1f", ((double) elaspedTime / SECONDS_TO_NANO)), 400, 65);
@@ -431,7 +451,7 @@ public class Main extends Canvas implements KeyListener {
 
     public static void movePlayer(int x, int y)
     {
-        if (level.get(playerRow + y).get(playerCol + x) == 'x')
+        if (level.get(playerRow + y).get(playerCol + x) == 'x' || (level.get(playerRow + y).get(playerCol + x) == 'e' && !open))
         {
             return;
         }
@@ -440,7 +460,7 @@ public class Main extends Canvas implements KeyListener {
             if (level.get(playerRow + y).get(playerCol + x) == 'c')
             {
                 spawnCookie();
-                counter++;
+                cookies++;
             }
 
             if (level.get(playerRow + y).get(playerCol + x) == '1' || level.get(playerRow + y).get(playerCol + x) == '2')
