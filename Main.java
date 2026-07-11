@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Main extends Canvas implements KeyListener {
+public class Main extends Canvas implements KeyListener, MouseListener, MouseMotionListener {
     static final int WIDTH = 1280;
     static final int HEIGHT = 720;
     static final int FRAME_DELAY = 16;
@@ -41,6 +41,8 @@ public class Main extends Canvas implements KeyListener {
     static ArrayList<String> enemyDir = new ArrayList<String>();
     static ArrayList<Long> enemyLastMove = new ArrayList<Long>();
     static ArrayList<Character> enemyType = new ArrayList<Character>();
+
+    static boolean inside = false;
 
     // Tiles
 
@@ -80,9 +82,12 @@ public class Main extends Canvas implements KeyListener {
 
     static long elaspedTime;
 
+    static int mouseX;
+    static int mouseY;
+
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Clean Game Loop");
+        JFrame frame = new JFrame("👾");
         Main game = new Main();
         game.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         frame.add(game);
@@ -91,6 +96,8 @@ public class Main extends Canvas implements KeyListener {
         frame.setVisible(true);
 
         game.addKeyListener(game);
+        game.addMouseListener(game);
+        game.addMouseMotionListener(game);
         game.requestFocus();
 
         game.createBufferStrategy(3);
@@ -115,43 +122,7 @@ public class Main extends Canvas implements KeyListener {
 
         // Level loading
 
-        try (BufferedReader br = new BufferedReader(new FileReader("Escape/level.txt"))) {
-            String line = br.readLine();
-            int j = 0;
-
-            while (line != null)
-            {
-                ArrayList<Character> newRow = new ArrayList<>();
-                for (int i = 0; i < line.length(); i++)
-                {
-                    newRow.add(line.charAt(i));
-                    
-                    if (line.charAt(i) == '1')
-                    {
-                        enemyX.add(i);
-                        enemyY.add(j);
-                        enemyDir.add(((int) ((Math.random() * 2) + 1) % 2 == 0 ? "left" : "right"));
-                        enemyLastMove.add(System.nanoTime());
-                        enemyType.add('1');
-
-                    }
-                    else if (line.charAt(i) == '2')
-                    {
-                        enemyX.add(i);
-                        enemyY.add(j);
-                        enemyDir.add(((int) ((Math.random() * 2) + 1) % 2 == 0 ? "up" : "down"));
-                        enemyLastMove.add(System.nanoTime());
-                        enemyType.add('2');
-                    }
-                }
-
-                level.add(newRow);
-                line = br.readLine();
-                j++;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadLevel();
 
         timer = (int) (0.05 * level.size() * level.get(0).size()) * SECONDS_TO_NANO;
         cookiesNeeded = (int) (0.02 * level.size() * level.get(0).size());
@@ -429,8 +400,6 @@ public class Main extends Canvas implements KeyListener {
 
             String startMessage = "Press ENTER to start";
 
-
-
             FontMetrics fm = g2d.getFontMetrics();
             int startMessageWidth = fm.stringWidth(startMessage);
 
@@ -452,7 +421,20 @@ public class Main extends Canvas implements KeyListener {
 
             g2d.drawString(loseMessage, (WIDTH - loseMessageWidth)/2, HEIGHT/2 + 40);
 
-            g2d.setColor(Color.WHITE);
+            
+
+            Rectangle button = new Rectangle((WIDTH-200)/2, (HEIGHT - 70)/2 + 170, 200, 70);
+
+            if (button.contains(mouseX, mouseY))
+            {
+                g2d.setColor(Color.GRAY);
+                inside = true;
+            }
+            else
+            {
+                g2d.setColor(Color.WHITE);
+                inside = false;
+            }
 
             g2d.fillRoundRect((WIDTH-200)/2, (HEIGHT - 70)/2 + 170, 200, 70, 16, 16);
 
@@ -528,6 +510,47 @@ public class Main extends Canvas implements KeyListener {
         level.get(row).set(col, 'c');
     }
 
+    public static void loadLevel()
+    {
+        try (BufferedReader br = new BufferedReader(new FileReader("Escape/level.txt"))) {
+            String line = br.readLine();
+            int j = 0;
+
+            while (line != null)
+            {
+                ArrayList<Character> newRow = new ArrayList<>();
+                for (int i = 0; i < line.length(); i++)
+                {
+                    newRow.add(line.charAt(i));
+                    
+                    if (line.charAt(i) == '1')
+                    {
+                        enemyX.add(i);
+                        enemyY.add(j);
+                        enemyDir.add(((int) ((Math.random() * 2) + 1) % 2 == 0 ? "left" : "right"));
+                        enemyLastMove.add(System.nanoTime());
+                        enemyType.add('1');
+
+                    }
+                    else if (line.charAt(i) == '2')
+                    {
+                        enemyX.add(i);
+                        enemyY.add(j);
+                        enemyDir.add(((int) ((Math.random() * 2) + 1) % 2 == 0 ? "up" : "down"));
+                        enemyLastMove.add(System.nanoTime());
+                        enemyType.add('2');
+                    }
+                }
+
+                level.add(newRow);
+                line = br.readLine();
+                j++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // --- INPUT METHODS ---
 
     public void keyPressed(KeyEvent e) {
@@ -575,5 +598,46 @@ public class Main extends Canvas implements KeyListener {
     }
 
     public void keyTyped(KeyEvent e) {
+
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }
+
+    public void mouseClicked(MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+
+        if (state == LOSE && inside)
+        {
+            state = PLAYING;
+            startTime = System.nanoTime();
+            cookies = 0;
+            loadLevel();
+        }
+    }
+
+    public void mousePressed(MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }   
+
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    public void mouseExited(MouseEvent e) {
+
     }
 }
