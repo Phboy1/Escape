@@ -43,3 +43,9 @@ SPACE or R - Restart
 ENTER - Begin the Game
 
 # Screenshots from Games
+
+<img width="1081" height="721" alt="Screenshot 2026-07-12 132715" src="https://github.com/user-attachments/assets/1ea36315-55a5-4dc0-9946-e7508a2a921a" />
+<img width="960" height="582" alt="Screenshot 2026-07-12 132550" src="https://github.com/user-attachments/assets/fa735bc3-f8c9-40e3-9808-a1fc83d3848e" />
+<img width="1043" height="611" alt="Screenshot 2026-07-12 132538" src="https://github.com/user-attachments/assets/e1083d53-0750-4c3a-8d46-b6ab884ae01d" />
+<img width="1348" height="707" alt="Screenshot 2026-07-12 132517" src="https://github.com/user-attachments/assets/579d4e9e-768e-4e37-b9c5-2f8bab1d6a47" />
+<img width="1018" height="701" alt="Screenshot 2026-07-12 132746" src="https://github.com/user-attachments/assets/a8395139-67dd-441a-ad74-6478e3400da1" />
