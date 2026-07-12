@@ -137,8 +137,6 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
         cookiesNeeded = (int) (0.02 * level.size() * level.get(0).size());
         startTime = System.nanoTime();
 
-        System.out.println(timer);
-
         spawnCookie();
         spawnFreeze();
 
@@ -223,9 +221,6 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                 {
                     break;
                 }
-
-                System.out.printf("Player row: %d%n", playerRow);
-                System.out.printf("Player col: %d%n", playerCol);
 
                 for (int i = 0; i < enemyX.size(); i++)
                 {
