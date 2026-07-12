@@ -629,6 +629,11 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
             state = PLAYING;
             startTime = System.nanoTime();
         }
+
+        if (e.getKeyCode() == KeyEvent.VK_Q && (state == LOSE || state == WIN))
+        {
+            System.exit(0);
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -672,6 +677,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
         {
             state = MENU;
             resetLevel();
+            spawnCookie();
         }
     }
 
