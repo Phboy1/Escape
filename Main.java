@@ -54,7 +54,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
     static final int JAIL_BLOCK = 3;
     static final int COOKIE = 4;
     static final int CHECKERED_BLOCK = 5;
-    static final int DEATH_BLOCK = 6;
+    static final int FREEZE_BLOCK = 6;
 
 
     static boolean leftPressed = false;
@@ -91,6 +91,8 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
     static boolean enemiesFrozen = false;
     static long freezeEndTime = 0;
 
+    static boolean flashing = false;
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("👾");
@@ -121,7 +123,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
             tiles[JAIL_BLOCK] = ImageIO.read(new File("Escape/images/jailblock.png"));
             tiles[COOKIE] = ImageIO.read(new File("Escape/images/cookie.png"));
             tiles[CHECKERED_BLOCK] = ImageIO.read(new File("Escape/images/checkeredblock.png"));
-            tiles[DEATH_BLOCK] = ImageIO.read(new File("Escape/images/deathblock.png"));
+            tiles[FREEZE_BLOCK] = ImageIO.read(new File("Escape/images/freezeblock.png"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -432,7 +434,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                 }
                 else if (character == 'f')
                 {
-                    g2d.drawImage(tiles[DEATH_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
+                    g2d.drawImage(tiles[FREEZE_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
                 }
                 j++;
             }
@@ -517,6 +519,35 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
 
         if (enemiesFrozen)
         {
+            long remaining = freezeEndTime- System.nanoTime();
+
+            if (remaining <= (long)(1.5 * SECONDS_TO_NANO))
+            {
+                if (remaining/150000000L % 2 == 0)
+                {
+                    flashing = true;
+                }
+                else
+                {
+                    flashing = false;
+                }
+            }
+
+            
+            if (flashing)
+            {
+                g2d.setFont(new Font("Arial", Font.BOLD, 40));
+                g2d.setColor(Color.RED);
+
+                FontMetrics flashingFm = g2d.getFontMetrics();
+
+                String flashingMessage = "UNFREEZING!";
+                
+                int flashingMessageWidth = flashingFm.stringWidth(flashingMessage);
+
+                g2d.drawString(flashingMessage, (WIDTH - flashingMessageWidth)/2, HEIGHT/2 - 250);
+            }
+
             g2d.setColor(new Color(0,0,30,100));
             g2d.fillRect(0,0,WIDTH, HEIGHT);
         }
@@ -587,6 +618,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
             if (level.get(playerRow + y).get(playerCol + x) == 'f')
             {
                 enemiesFrozen = true;
+                flashing = false;
                 freezeEndTime = System.nanoTime() + 3 * SECONDS_TO_NANO;
                 frozenTimes++;
             }    
@@ -715,6 +747,14 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
         {
             state = PLAYING;
             startTime = System.nanoTime();
+        }
+
+        if ((e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_R) && (state == LOSE || state == WIN))
+        {
+            state = MENU;
+            resetLevel();
+            spawnCookie();
+            spawnFreeze();
         }
 
         if (e.getKeyCode() == KeyEvent.VK_Q && (state == LOSE || state == WIN))
