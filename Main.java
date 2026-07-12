@@ -515,6 +515,12 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
         try (BufferedReader br = new BufferedReader(new FileReader("Escape/level.txt"))) {
             String line = br.readLine();
             int j = 0;
+            enemyX.clear();
+            enemyY.clear();
+            enemyDir.clear();
+            enemyLastMove.clear();
+            level.clear();
+            enemyType.clear();
 
             while (line != null)
             {
