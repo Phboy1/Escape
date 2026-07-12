@@ -181,35 +181,46 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                     open = true;
                 }
 
-                if (upPressed)
+                if (upPressed && state == PLAYING)
                 {
                     movePlayer(0, -1);
                     upHeld = true;
                     upPressed = false;
                 }
-                if (rightPressed)
+                else if (rightPressed && state == PLAYING)
                 {
                     movePlayer(1, 0);
                     rightHeld = true;
                     rightPressed = false;
                 }
-                if (leftPressed)
+                else if (leftPressed && state == PLAYING)
                 {
                     movePlayer(-1, 0);
                     leftHeld = true;
                     leftPressed = false;
                 }
-                if (downPressed)
+                else if (downPressed && state == PLAYING)
                 {
                     movePlayer(0, 1);
                     downHeld = true;
                     downPressed = false;
                 }
+
+                if (state != PLAYING)
+                {
+                    break;
+                }
+
                 System.out.printf("Player row: %d%n", playerRow);
                 System.out.printf("Player col: %d%n", playerCol);
 
                 for (int i = 0; i < enemyX.size(); i++)
                 {
+                    if (state != PLAYING)
+                    {
+                        break;
+                    }
+
                     if (System.nanoTime() - enemyLastMove.get(i) < ENEMY_SPEED)
                     {
                         continue;
@@ -230,7 +241,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                                     spawnCookie();
                                 }
 
-                                if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('c'))
+                                if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('p'))
                                 {
                                     state = LOSE;
                                 }
@@ -485,7 +496,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                 state = WIN;
             }
 
-            if (state != LOSE && state != WIN);
+            if (state != LOSE && state != WIN)
             {
                 level.get(playerRow).set(playerCol, '_');
                 playerRow += y;
