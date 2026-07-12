@@ -36,6 +36,10 @@ When freezing occurs I start a 3 second timer to stop the game timer from moving
 
 I wanted an escape game that used discrete movement and tracked EVERYTHING inside of a level grid. This is also highly dynamic for any level and using 5% of the level size for the amount of time in seconds and 2% of the level size for the amount of cookies needed, it makes the game dynamic for any level. You can also have jagged levels as well.
 
+# AI Usage
+
+I used AI for all of the assets (images) for this project. Tiles, enemies, players.
+
 # Controls
 
 WASD or Arrow Keys - Movement
