@@ -432,8 +432,6 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
 
             g2d.drawString(loseMessage, (WIDTH - loseMessageWidth)/2, HEIGHT/2 + 40);
 
-            
-
             Rectangle button = new Rectangle((WIDTH-200)/2, (HEIGHT - 70)/2 + 170, 200, 70);
 
             if (button.contains(mouseX, mouseY))
@@ -454,6 +452,21 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
             g2d.setFont(new Font("Arial", Font.BOLD, 30));
 
             g2d.drawString("Try again?", (WIDTH-200)/2 + 25, (HEIGHT - 70)/2 + 215);
+
+
+            g2d.setColor(new Color(230,230,230));
+
+            g2d.setFont(new Font("Arial", Font.BOLD, 25));
+
+            FontMetrics quitFm = g2d.getFontMetrics();
+
+            String quitMessage = "Press 'q' to quit.";
+            
+            int quitMessageWidth = quitFm.stringWidth(quitMessage);
+
+            g2d.drawString(quitMessage, (WIDTH - quitMessageWidth)/2, HEIGHT/2 + 250);
+
+
         }
 
         if (state == WIN)
