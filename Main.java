@@ -689,14 +689,47 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
     {
         int row;
         int col;
+        int count = 0;
 
         do
         {
             row = (int) (Math.random() * level.size());
             col = (int) (Math.random() * level.get(row).size());
+            count++;
+            if (count == 100)
+            {
+                break;
+            }
         } while (level.get(row).get(col) == 'x' || level.get(row).get(col) == 'p' || level.get(row).get(col) == '1' || level.get(row).get(col) == '2' || level.get(row).get(col) == 'e' || level.get(row).get(col) == 'c');
 
-        level.get(row).set(col, 'f');
+
+        if (count != 100)
+        {
+            level.get(row).set(col, 'f');
+        }
+        else
+        {
+            boolean found = false;
+            for (ArrayList <Character> line : level)
+            {
+                for (int i = 0; i < line.size(); i++)
+                {
+                    if (line.get(i) == '_')
+                    {
+                        line.set(i, 'f');
+                        found = true;
+                    }
+                    if (found)
+                    {
+                        break;
+                    }
+                }
+                if (found)
+                {
+                    break;
+                }
+            }
+        }
     }
 
     public static void resetLevel()

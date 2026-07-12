@@ -18,7 +18,11 @@ The game uses a 2D Array List as said earlier and it contains a character 'p'. T
 
 ## Enemy Movement
 
-There are 2 types of enemies, vertical moving and horizontal moving enemies. With those type of enemies I have 4 parallel arraylists that track one unique property of the enemy whether that be enemyX, enemyY, enemyDir, or enemyType
+There are 2 types of enemies, vertical moving and horizontal moving enemies. With those type of enemies I have 4 parallel arraylists that track one unique property of the enemy whether that be enemyX, enemyY, enemyDir, or enemyType. Then for movement, I simply check if the index infront of the enemy is an 'x', if so they I reverse the enemyDir and continue.
+
+## Cookie Spawning
+
+I use a do while loop. This is TECHNICALLY RISKY, since cookies can infinitely spawn.
 
 # Motivation
 
