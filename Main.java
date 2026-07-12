@@ -122,7 +122,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
 
         // Level loading
 
-        loadLevel();
+        resetLevel();
 
         timer = (int) (0.05 * level.size() * level.get(0).size()) * SECONDS_TO_NANO;
         cookiesNeeded = (int) (0.02 * level.size() * level.get(0).size());
@@ -469,6 +469,27 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
             int winMessageLength = fm.stringWidth(winMessage);
 
             g2d.drawString(winMessage, (WIDTH - winMessageLength)/2, HEIGHT/2 + 40);
+
+            Rectangle button = new Rectangle((WIDTH-200)/2, (HEIGHT - 70)/2 + 170, 200, 70);
+
+            if (button.contains(mouseX, mouseY))
+            {
+                g2d.setColor(Color.GRAY);
+                inside = true;
+            }
+            else
+            {
+                g2d.setColor(Color.WHITE);
+                inside = false;
+            }
+
+            g2d.fillRoundRect((WIDTH-200)/2, (HEIGHT - 70)/2 + 170, 200, 70, 16, 16);
+
+            g2d.setColor(Color.BLACK);
+
+            g2d.setFont(new Font("Arial", Font.BOLD, 30));
+
+            g2d.drawString("Try again?", (WIDTH-200)/2 + 25, (HEIGHT - 70)/2 + 215);
         }
     }
 
@@ -521,8 +542,10 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
         level.get(row).set(col, 'c');
     }
 
-    public static void loadLevel()
+    public static void resetLevel()
     {
+        cookies = 0;
+        open = false;
         try (BufferedReader br = new BufferedReader(new FileReader("Escape/level.txt"))) {
             String line = br.readLine();
             int j = 0;
@@ -632,11 +655,10 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
         mouseX = e.getX();
         mouseY = e.getY();
 
-        if (state == LOSE && inside)
+        if ((state == LOSE || state == WIN) && inside)
         {
             state = MENU;
-            cookies = 0;
-            loadLevel();
+            resetLevel();
         }
     }
 
