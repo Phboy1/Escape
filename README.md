@@ -20,12 +20,26 @@ The game uses a 2D Array List as said earlier and it contains a character 'p'. T
 
 There are 2 types of enemies, vertical moving and horizontal moving enemies. With those type of enemies I have 4 parallel arraylists that track one unique property of the enemy whether that be enemyX, enemyY, enemyDir, or enemyType. Then for movement, I simply check if the index infront of the enemy is an 'x', if so they I reverse the enemyDir and continue.
 
-## Cookie Spawning
+## Cookie Spawning && Freeze Spawning
 
-I use a do while loop. This is TECHNICALLY RISKY, since cookies can infinitely spawn.
+I use a do while loop. This is TECHNICALLY RISKY, since cookies can infinitely spawn in places with 'x', enemies or players, therefore, after 100 attempts, it simply puts it in the first spot there is an empty space to ensure the game does not crash.
+
+## Timer
+
+I used nanotime to ensure that the timing was as accurate as possible.
+
+## Freezing
+
+When freezing occurs I start a 3 second timer to stop the game timer from moving. Additonally, I use the "continue" key word to ensure enemies don't move. I also add a blue hue over the game to ensure the player knows everything has been frozen. Finally, in the last 1.5 seconds there is an UNFREEZING flashing warning to ensure the player knows.
 
 # Motivation
 
+I wanted an escape game that used discrete movement and tracked EVERYTHING inside of a level grid. This is also highly dynamic for any level and using 5% of the level size for the amount of time in seconds and 2% of the level size for the amount of cookies needed, it makes the game dynamic for any level. You can also have jagged levels as well.
+
 # Controls
+
+WASD or Arrow Keys - Movement
+SPACE or R - Restart
+ENTER - Begin the Game
 
 # Screenshots from Games
