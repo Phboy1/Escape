@@ -512,7 +512,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
 
         }
 
-        if (enemiesFrozen)
+        if (enemiesFrozen && state == PLAYING)
         {
             long remaining = freezeEndTime- System.nanoTime();
 
