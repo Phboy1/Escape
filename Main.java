@@ -44,6 +44,8 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
 
     static boolean inside = false;
 
+    static int frozenTimes = 0;
+
     // Tiles
 
     static final int WALL_BLOCK = 0;
@@ -52,6 +54,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
     static final int JAIL_BLOCK = 3;
     static final int COOKIE = 4;
     static final int CHECKERED_BLOCK = 5;
+    static final int DEATH_BLOCK = 6;
 
 
     static boolean leftPressed = false;
@@ -68,7 +71,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
 
     static BufferedImage[] backgroundImg = new BufferedImage[1];
 
-    static BufferedImage[] tiles = new BufferedImage[6];
+    static BufferedImage[] tiles = new BufferedImage[7];
 
     static ArrayList<ArrayList<Character>> level = new ArrayList<ArrayList<Character>>();
 
@@ -84,6 +87,9 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
 
     static int mouseX;
     static int mouseY;
+
+    static boolean enemiesFrozen = false;
+    static long freezeEndTime = 0;
 
 
     public static void main(String[] args) {
@@ -115,6 +121,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
             tiles[JAIL_BLOCK] = ImageIO.read(new File("Escape/images/jailblock.png"));
             tiles[COOKIE] = ImageIO.read(new File("Escape/images/cookie.png"));
             tiles[CHECKERED_BLOCK] = ImageIO.read(new File("Escape/images/checkeredblock.png"));
+            tiles[DEATH_BLOCK] = ImageIO.read(new File("Escape/images/deathblock.png"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,6 +138,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
         System.out.println(timer);
 
         spawnCookie();
+        spawnFreeze();
 
         while (true) {
             // 1. Logic (Thinking)
@@ -168,7 +176,10 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
             }
             case PLAYING:
             {
-                currentTime = System.nanoTime();
+                if (!enemiesFrozen)
+                {
+                    currentTime = System.nanoTime() - 3 * frozenTimes * SECONDS_TO_NANO;
+                }
                 elaspedTime = timer - (currentTime - startTime);
 
                 if (elaspedTime <= 50000000)
@@ -226,6 +237,17 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                         continue;
                     }
 
+                    if (enemiesFrozen && System.nanoTime() > freezeEndTime)
+                    {
+                        enemiesFrozen = false;
+                        spawnFreeze();
+                    }
+
+                    if (enemiesFrozen)
+                    {
+                        continue;
+                    }
+
                     if (enemyType.get(i) == '1')
                     {
                         if (enemyDir.get(i).equals("left"))
@@ -239,6 +261,11 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                                 if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('c'))
                                 {
                                     spawnCookie();
+                                }
+
+                                if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('f'))
+                                {
+                                    spawnFreeze();
                                 }
 
                                 if (level.get(enemyY.get(i)).get(enemyX.get(i) - 1).equals('p'))
@@ -266,6 +293,11 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                                 if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('c'))
                                 {
                                     spawnCookie();
+                                }
+
+                                if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('f'))
+                                {
+                                    spawnFreeze();
                                 }
 
                                 if (level.get(enemyY.get(i)).get(enemyX.get(i) + 1).equals('p'))
@@ -298,6 +330,11 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                                     spawnCookie();
                                 }
 
+                                if (level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('f'))
+                                {
+                                    spawnFreeze();
+                                }
+
                                 if (level.get(enemyY.get(i) - 1).get(enemyX.get(i)).equals('p'))
                                 {
                                     state = LOSE;
@@ -323,6 +360,11 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                                 if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('c'))
                                 {
                                     spawnCookie();
+                                }
+
+                                if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('f'))
+                                {
+                                    spawnFreeze();
                                 }
 
                                 if (level.get(enemyY.get(i) + 1).get(enemyX.get(i)).equals('p'))
@@ -386,7 +428,11 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                 }
                 else if (character == 'c')
                 {
-                    g2d.drawImage(tiles[COOKIE], j*TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
+                    g2d.drawImage(tiles[COOKIE], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
+                }
+                else if (character == 'f')
+                {
+                    g2d.drawImage(tiles[DEATH_BLOCK], j * TILE_SIZE + xOffset, i * TILE_SIZE + yOffset, null);
                 }
                 j++;
             }
@@ -469,6 +515,12 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
 
         }
 
+        if (enemiesFrozen)
+        {
+            g2d.setColor(new Color(0,0,30,100));
+            g2d.fillRect(0,0,WIDTH, HEIGHT);
+        }
+
         if (state == WIN)
         {
             g2d.setColor(new Color(0,0,0, 150));
@@ -520,6 +572,13 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
                 cookies++;
             }
 
+            if (level.get(playerRow + y).get(playerCol + x) == 'f')
+            {
+                enemiesFrozen = true;
+                freezeEndTime = System.nanoTime() + 3 * SECONDS_TO_NANO;
+                frozenTimes++;
+            }    
+
             if (level.get(playerRow + y).get(playerCol + x) == '1' || level.get(playerRow + y).get(playerCol + x) == '2')
             {
                 state = LOSE;
@@ -550,15 +609,31 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
         {
             row = (int) (Math.random() * level.size());
             col = (int) (Math.random() * level.get(row).size());
-        } while (level.get(row).get(col) == 'x' || level.get(row).get(col) == 'p' || level.get(row).get(col) == '1' || level.get(row).get(col) == '2' || level.get(row).get(col) == 'e');
+        } while (level.get(row).get(col) == 'x' || level.get(row).get(col) == 'p' || level.get(row).get(col) == '1' || level.get(row).get(col) == '2' || level.get(row).get(col) == 'e' || level.get(row).get(col) == 'f');
 
         level.get(row).set(col, 'c');
+    }
+
+    public static void spawnFreeze()
+    {
+        int row;
+        int col;
+
+        do
+        {
+            row = (int) (Math.random() * level.size());
+            col = (int) (Math.random() * level.get(row).size());
+        } while (level.get(row).get(col) == 'x' || level.get(row).get(col) == 'p' || level.get(row).get(col) == '1' || level.get(row).get(col) == '2' || level.get(row).get(col) == 'e' || level.get(row).get(col) == 'c');
+
+        level.get(row).set(col, 'f');
     }
 
     public static void resetLevel()
     {
         cookies = 0;
         open = false;
+        frozenTimes = 0;
+        enemiesFrozen = false;
         try (BufferedReader br = new BufferedReader(new FileReader("Escape/level.txt"))) {
             String line = br.readLine();
             int j = 0;
@@ -678,6 +753,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
             state = MENU;
             resetLevel();
             spawnCookie();
+            spawnFreeze();
         }
     }
 
