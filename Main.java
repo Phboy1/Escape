@@ -634,8 +634,7 @@ public class Main extends Canvas implements KeyListener, MouseListener, MouseMot
 
         if (state == LOSE && inside)
         {
-            state = PLAYING;
-            startTime = System.nanoTime();
+            state = MENU;
             cookies = 0;
             loadLevel();
         }
